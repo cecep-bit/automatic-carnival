@@ -1,0 +1,25 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>English to Japanese Translator</title>
+</head>
+<body>
+    <h1>🇬🇧 Translate English → 🇯🇵 Japanese</h1>
+    <form method="post">
+        <input name="text" type="text" placeholder="Enter English text" required>
+        <button type="submit">Translate</button>
+    </form>
+
+    {% if translation %}
+        <h3>🈶 English:</h3>
+        <p>{{ original }}</p>
+
+        <h3>🇯🇵 Japanese:</h3>
+        <p>{{ translation }}</p>
+
+        <h3>📝 Romaji:</h3>
+        <p>{{ romaji }}</p>
+    {% endif %}
+</body>
+</html>
