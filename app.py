@@ -4,7 +4,7 @@ from deep_translator import GoogleTranslator
 import pykakasi
 import os
 
-TOKEN = os.getenv("8146298227:AAEFZdSt7tEKqr4Gg-dZHLJSF-2AAvEhyMk")
+TOKEN = os.getenv(8146298227:AAEFZdSt7tEKqr4Gg-dZHLJSF-2AAvEhyMk)
 
 kks = pykakasi.kakasi()
 
