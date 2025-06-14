@@ -1,27 +1,25 @@
-from flask import Flask, render_template, request
+from telegram import Update
+from telegram.ext import ApplicationBuilder, MessageHandler, ContextTypes, filters
 from deep_translator import GoogleTranslator
 import pykakasi
+import os
 
-app = Flask(__name__)
+TOKEN = os.getenv("8146298227:AAEFZdSt7tEKqr4Gg-dZHLJSF-2AAvEhyMk")
+
 kks = pykakasi.kakasi()
 
-def to_romaji(text):
-    result = kks.convert(text)
-    return " ".join([item['hepburn'] for item in result])
+def to_romaji(japanese_text):
+    result = kks.convert(japanese_text)
+    return ' '.join([item['hepburn'] for item in result])
 
-@app.route("/", methods=["GET", "POST"])
-def translate():
-    translation = None
-    romaji = None
-    original = None
+async def translate(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    text = update.message.text
+    jp_text = GoogleTranslator(source='en', target='ja').translate(text)
+    romaji = to_romaji(jp_text)
+    await update.message.reply_text(f"🇯🇵 {jp_text}\n📝 {romaji}")
 
-    if request.method == "POST":
-        original = request.form.get("text")
-        japanese = GoogleTranslator(source="auto", target="ja").translate(original)
-        romaji = to_romaji(japanese)
-        translation = japanese
-
-    return render_template("index.html", original=original, translation=translation, romaji=romaji)
-
-if __name__ == "__main__":
-    app.run(debug=True)
+if __name__ == '__main__':
+    app = ApplicationBuilder().token(TOKEN).build()
+    app.add_handler(MessageHandler(filters.TEXT & (~filters.COMMAND), translate))
+    print("Bot is running...")
+    app.run_polling()
